@@ -5,8 +5,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-
-
   async validate(payload: any) {
     return { id: payload.sub, username: payload.username };
   }
@@ -15,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey:  configService.get<string>('YWT_SECRET', 'ftyghubijnkm'),
-    });    
+      secretOrKey: configService.get<string>('YWT_SECRET', 'ftyghubijnkm')
+    });
   }
 }

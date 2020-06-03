@@ -4,11 +4,8 @@ import * as bcrypt from 'bcryptjs';
 import { UsersService } from '../users/users.service';
 import { LoginUserDto } from './dto/login-user.dto';
 
-
-
 @Injectable()
 export class AuthService {
-
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
     if (user && (await this.passwordsAreEqual(user.password, pass))) {
@@ -18,26 +15,16 @@ export class AuthService {
     return null;
   }
 
-
-
-  async login(user: LoginUserDto): Promise<{access_token: string}> {
-    const payload = { username: user.username};
+  async login(user: LoginUserDto): Promise<{ access_token: string }> {
+    const payload = { username: user.username };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload)
     };
   }
 
-
-  private async passwordsAreEqual(
-    hashedPassword: string,
-    plainPassword: string
-  ): Promise<boolean> {
+  private async passwordsAreEqual(hashedPassword: string, plainPassword: string): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService
-  ) {}
-
+  constructor(private readonly usersService: UsersService, private readonly jwtService: JwtService) {}
 }

@@ -11,37 +11,31 @@ import { AppService } from './app.service';
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (
-        configService: ConfigService,
-      ): Promise<PostgresConnectionOptions> => {
-        return ({
-        type: 'postgres',
-        host: configService.get<string>('TYPEORM_HOST'),
-        port: configService.get<number>('TYPEORM_PORT'),
-        username: configService.get<string>('TYPEORM_USERNAME'),
-        password: configService.get<string>('TYPEORM_PASSWORD'),
-        database: configService.get<string>('TYPEORM_DATABASE'),
-        entities: [
-          `${__dirname  }/**/*.entity{.ts,.js}`,
-        ],
-        migrations: [ `${__dirname  }/migrations/**/*.{.ts,.js}`],
-        cli: {
-          migrationsDir: 'src/migrations',
-          entitiesDir:  'src/models',
-        },
-        synchronize: true,
-        logging: true,
-        migrationsRun: false,
-
-      })},
-      inject: [ConfigService],
+      useFactory: async (configService: ConfigService): Promise<PostgresConnectionOptions> => {
+        return {
+          type: 'postgres',
+          host: configService.get<string>('TYPEORM_HOST'),
+          port: configService.get<number>('TYPEORM_PORT'),
+          username: configService.get<string>('TYPEORM_USERNAME'),
+          password: configService.get<string>('TYPEORM_PASSWORD'),
+          database: configService.get<string>('TYPEORM_DATABASE'),
+          entities: [`${__dirname}/**/*.entity{.ts,.js}`],
+          migrations: [`${__dirname}/migrations/**/*.{.ts,.js}`],
+          cli: {
+            migrationsDir: 'src/migrations',
+            entitiesDir: 'src/models'
+          },
+          synchronize: true,
+          logging: true,
+          migrationsRun: false
+        };
+      },
+      inject: [ConfigService]
     }),
     AuthModule,
-    UsersModule,
+    UsersModule
   ],
-  controllers: [
-    AppController
-  ],
+  controllers: [AppController],
   providers: [AppService]
 })
 export class AppModule {}
