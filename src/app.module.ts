@@ -8,7 +8,7 @@ import { UsersModule } from './users/users.module';
 import { AppService } from './app.service';
 @Module({
   imports: [
-    ConfigModule,
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (
