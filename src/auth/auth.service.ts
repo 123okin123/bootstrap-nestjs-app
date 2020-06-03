@@ -22,6 +22,10 @@ export class AuthService {
     };
   }
 
+  // async getMe(token: string) {
+  //   this.jwtService.decode();
+  // }
+
   private async passwordsAreEqual(hashedPassword: string, plainPassword: string): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
