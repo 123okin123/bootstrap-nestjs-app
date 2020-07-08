@@ -9,7 +9,6 @@ import * as helmet from 'helmet';
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.setGlobalPrefix('api');
   app.use(helmet());
   app.enableCors({ origin: ['http://localhost:3000'] });
 
@@ -20,6 +19,7 @@ async function bootstrap(): Promise<void> {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('doc', app, document);
+  app.setGlobalPrefix('api');
 
   // app.useStaticAssets(join(__dirname, '..', 'public'));
   // app.setBaseViewsDir(join(__dirname, '..', 'views'));

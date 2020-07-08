@@ -28,8 +28,7 @@ export class UserEntity {
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
 
-  @BeforeInsert()
-  async hashPassword(): Promise<void> {
-    this.password = await bcrypt.hash(this.password, 10);
+  static async hashPassword(password): Promise<string> {
+    return await bcrypt.hash(password, 10);
   }
 }

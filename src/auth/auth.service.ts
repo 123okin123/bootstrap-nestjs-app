@@ -1,9 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, UnprocessableEntityException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { UserEntity } from 'src/users/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { CrudRequest } from '@nestjsx/crud';
 
 @Injectable()
 export class AuthService {
@@ -23,10 +24,17 @@ export class AuthService {
   }
 
   async signUp(user: CreateUserDto): Promise<{ expires_in: string; access_token: string }> {
-    return this.usersService.create(user).then(user => {
-      // send mail
-      return this.createToken(user);
-    });
+    return this.usersService
+      .create(user)
+      .then(user => {
+        console.log(user);
+        // send mail
+        return this.createToken(user);
+      })
+      .catch(err => {
+        console.log('test');
+        return Promise.reject(new UnprocessableEntityException('User exists'));
+      });
   }
 
   public async verify(payload: { sub: string }): Promise<UserEntity> {
