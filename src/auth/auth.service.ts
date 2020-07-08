@@ -1,33 +1,20 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { UsersService } from '../users/users.service';
-import { LoginUserDto } from './dto/login-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from 'src/users/user.entity';
+import { UsersService } from '../users/users.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
-  // async validateUser(username: string, pass: string): Promise<any> {
-  //   const user = await this.usersService.findOne(username);
-  //   if (user && (await this.passwordsAreEqual(user.password, pass))) {
-  //     const { password, ...result } = user;
-  //     return result;
-  //   }
-  //   return null;
-  // }
-
-  // async login(user: LoginUserDto): Promise<{ access_token: string }> {
-  //   const payload = { username: user.email };
-  //   return {
-  //     access_token: this.jwtService.sign(payload)
-  //   };
-  // }
-
   public async logIn(email: string, password: string): Promise<UserEntity> {
+    console.log(email, password);
     return await this.usersService
       .findOne({ email })
       .then(async user => {
+        if (!user) {
+          return Promise.reject(new UnauthorizedException('Invalid email'));
+        }
         return (await this.passwordsAreEqual(user.password, password))
           ? Promise.resolve(user)
           : Promise.reject(new UnauthorizedException('Invalid password'));
@@ -42,16 +29,15 @@ export class AuthService {
     });
   }
 
-  public async verify(payload) {
+  public async verify(payload: { sub: string }): Promise<UserEntity> {
     return await this.usersService
       .findOne({ id: payload.sub })
       .then(signedUser => Promise.resolve(signedUser))
-      .catch(err => Promise.reject(new UnauthorizedException('Invalid Authorization')));
+      .catch(() => Promise.reject(new UnauthorizedException('Invalid Authorization')));
   }
 
   async createToken(signedUser: UserEntity): Promise<{ expires_in: string; access_token: string }> {
-    const expiresIn = process.env.JWT_EXPIRATION,
-      secretOrKey = process.env.SECRET_KEY;
+    const expiresIn = process.env.JWT_EXPIRATION;
     const user = {
       sub: signedUser.id,
       email: signedUser.email,

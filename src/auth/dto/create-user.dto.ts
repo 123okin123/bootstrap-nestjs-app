@@ -7,7 +7,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  readonly flastName: string;
+  readonly lastName: string;
 
   @IsEmail({}, { message: 'Is not a valid email' })
   @IsNotEmpty()
