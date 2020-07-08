@@ -8,7 +8,7 @@ import { AppModule } from './app.module';
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-
+  app.setGlobalPrefix('api');
   const options = new DocumentBuilder()
     .setTitle(' API')
     .setDescription('The API description')
@@ -21,6 +21,6 @@ async function bootstrap(): Promise<void> {
   // app.setBaseViewsDir(join(__dirname, '..', 'views'));
   // app.setViewEngine('hbs');
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();

@@ -13,7 +13,15 @@ Nestjs starter project with JWT Auth and basic user module.
 ## Installation
 
 ```bash
-$ npm install
+$ yarn install
+```
+
+```bash
+$ typeorm:run
+```
+
+```bash
+$ seed:run
 ```
 
 ## Running the app

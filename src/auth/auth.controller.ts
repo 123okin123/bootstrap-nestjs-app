@@ -1,23 +1,31 @@
-import { Controller, Post, UseGuards, Get, UsePipes, ValidationPipe, Req, Body } from '@nestjs/common';
-import { Request } from 'express';
-import { AuthService } from './auth.service';
-import { LoginUserDto } from './dto/login-user.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
+import { AuthService } from './auth.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() body: LoginUserDto): Promise<{ access_token: string }> {
-    return this.authService.login(body);
+  @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  public async login(
+    @Req() req
+  ): Promise<{
+    expires_in: string;
+    access_token: string;
+  }> {
+    return await this.authService.createToken(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('me')
-  getProfile(@Req() req): string {
-    return req.user;
+  @Post('signup')
+  public async signUp(
+    @Body(new ValidationPipe()) user: CreateUserDto
+  ): Promise<{
+    expires_in: string;
+    access_token: string;
+  }> {
+    return await this.authService.signUp(user);
   }
 
   constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
