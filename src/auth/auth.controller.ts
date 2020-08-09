@@ -1,8 +1,10 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe, Get, Request } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { UserEntity } from 'src/users/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +28,12 @@ export class AuthController {
     access_token: string;
   }> {
     return await this.authService.signUp(user);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  public async getMe(@Request() req): Promise<UserEntity> {
+    return await this.usersService.findOne(req.user.id);
   }
 
   constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
