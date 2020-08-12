@@ -1,14 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { UserStatus } from 'src/auth/enum/user-status.enum';
+import { Exclude } from 'class-transformer';
 import { UserRole } from 'src/auth/enum/user-role.enum';
-import { Exclude, Expose } from 'class-transformer';
+import { UserStatus } from 'src/auth/enum/user-status.enum';
+import { Base } from 'src/base.entity';
+import { Column, Entity } from 'typeorm';
 
 @Entity('users')
-export class UserEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class UserEntity extends Base {
   @Column({ type: 'varchar', nullable: false, unique: true })
   email: string;
 

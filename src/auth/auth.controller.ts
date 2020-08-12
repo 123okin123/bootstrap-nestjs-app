@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserEntity } from 'src/users/user.entity';
+import { plainToClass } from 'class-transformer';
 
 @Controller('auth')
 export class AuthController {
@@ -33,7 +34,8 @@ export class AuthController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   public async getMe(@Request() req): Promise<UserEntity> {
-    return await this.usersService.findOne(req.user.id);
+    const user = await this.usersService.findOne(req.user.id);
+    return plainToClass(UserEntity, user);
   }
 
   constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}

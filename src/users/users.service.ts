@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult, DeleteResult } from 'typeorm';
-import { UserEntity } from './user.entity';
-import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { CreateUserDto } from 'src/auth/dto/create-user.dto';
+import { Repository } from 'typeorm';
+import { UserEntity } from './user.entity';
 
 export type User = any;
 

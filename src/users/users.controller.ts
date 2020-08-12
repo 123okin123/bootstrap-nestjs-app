@@ -14,30 +14,20 @@ import { UsersService } from './users.service';
   },
   dto: {
     create: CreateUserDto
+  },
+  query: {
+    // exclude: ['password']
+  },
+  params: {
+    slug: {
+      field: 'id',
+      type: 'uuid',
+      primary: true
+    }
   }
 })
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 export class UsersController implements CrudController<UserEntity> {
-  // @Get()
-  // async findAll(): Promise<UserEntity[]> {
-  //   return await this.service.findAll();
-  // }
-
-  // @Get('/:id')
-  // async findOne(@Param('id') id: string): Promise<UserEntity> {
-  //   return this.service.findOne({ id: id });
-  // }
-
-  // @Put('/:id')
-  // async update(@Param('id') id: string, @Body(new ValidationPipe()) payload: UserEntity): Promise<UpdateResult> {
-  //   return this.service.update(id, payload);
-  // }
-
-  // @Delete('/:id')
-  // async delete(@Param('id') id: string): Promise<DeleteResult> {
-  //   return this.service.delete(id);
-  // }
-
   constructor(public readonly service: UsersService) {}
 }

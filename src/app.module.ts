@@ -6,6 +6,8 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AppService } from './app.service';
+import { PostsModule } from './posts/posts.module';
+import { ImageUploadModule } from './image-upload/image-upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -33,7 +35,9 @@ import { AppService } from './app.service';
       inject: [ConfigService]
     }),
     AuthModule,
-    UsersModule
+    UsersModule,
+    PostsModule,
+    ImageUploadModule
   ],
   controllers: [AppController],
   providers: [AppService]
