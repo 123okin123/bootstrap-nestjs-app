@@ -3,7 +3,8 @@ import { Exclude } from 'class-transformer';
 import { UserRole } from 'src/auth/enum/user-role.enum';
 import { UserStatus } from 'src/auth/enum/user-status.enum';
 import { Base } from 'src/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { PostEntity } from 'src/posts/post.entity';
 
 @Entity('users')
 export class UserEntity extends Base {
@@ -25,6 +26,12 @@ export class UserEntity extends Base {
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
+
+  @OneToMany(
+    type => PostEntity,
+    post => post.user
+  )
+  posts: PostEntity[];
 
   static async hashPassword(password): Promise<string> {
     return await bcrypt.hash(password, 10);
