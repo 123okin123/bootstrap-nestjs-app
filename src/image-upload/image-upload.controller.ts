@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseGuards, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { AmazonS3FileInterceptor } from 'nestjs-multer-extended';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AWSFile } from './dto/aws-file.dto';
@@ -18,7 +18,8 @@ export class ImageUploadController {
     })
   )
   uploadFile(@UploadedFile() file: AWSFile): Promise<ImageEntity> {
-    return this.imageUploadService.saveImage(file);
+    console.log(file);
+    return this.imageUploadService.createImage(file);
   }
   constructor(private readonly imageUploadService: ImageUploadService) {}
 }

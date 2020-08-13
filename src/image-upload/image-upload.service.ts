@@ -4,10 +4,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ImageEntity } from './image.entity';
 import { AWSFile } from './dto/aws-file.dto';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 
 @Injectable()
-export class ImageUploadService {
-  async saveImage(createImageDTO: AWSFile): Promise<ImageEntity> {
+export class ImageUploadService extends TypeOrmCrudService<ImageEntity> {
+  async createImage(createImageDTO: AWSFile): Promise<ImageEntity> {
     const image = new ImageEntity();
     image.contentType = createImageDTO.ContentType;
     image.encoding = createImageDTO.encoding;
@@ -22,8 +23,9 @@ export class ImageUploadService {
   }
 
   constructor(
-    private readonly configService: ConfigService,
     @InjectRepository(ImageEntity)
     private imagesRepository: Repository<ImageEntity>
-  ) {}
+  ) {
+    super(imagesRepository);
+  }
 }

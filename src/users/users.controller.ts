@@ -14,16 +14,6 @@ import { UsersService } from './users.service';
   },
   dto: {
     create: CreateUserDto
-  },
-  query: {
-    // exclude: ['password']
-  },
-  params: {
-    slug: {
-      field: 'id',
-      type: 'uuid',
-      primary: true
-    }
   }
 })
 @Controller('users')

@@ -6,7 +6,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: Record<string, any>): Promise<{ id: any; email: string }> {
-    console.log(payload);
     return { id: payload.sub, email: payload.email };
   }
 

@@ -3,8 +3,26 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import 'reflect-metadata';
-import { AppModule } from './app.module';
 import * as helmet from 'helmet';
+
+import { CrudConfigService } from '@nestjsx/crud';
+
+CrudConfigService.load({
+  query: {
+    limit: 25,
+    cache: 2000,
+    alwaysPaginate: true
+  },
+  params: {
+    id: {
+      field: 'id',
+      type: 'uuid',
+      primary: true
+    }
+  }
+});
+
+import { AppModule } from './app.module';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
